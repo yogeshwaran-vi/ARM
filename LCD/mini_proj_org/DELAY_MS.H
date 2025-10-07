@@ -1,9 +1,8 @@
-void delay_ms(unsigned int ms)
+void delay_ms(unsigned int S)
 {
-	T0PR=15000-1;
-	T0TCR=0x01;
-	while(T0TC<1);
-	T0TCR=0x03;
-	T0TCR=0x00;
+	T1PR=15000-1;
+	T1TCR=0x01;		//ENABLE
+	while(T1TC<S);
+	T1TCR=0x03;		//RESET
+	T1TCR=0x00;	    //DISABLE
 }
-
