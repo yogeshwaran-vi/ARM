@@ -17,7 +17,9 @@ int main()
     lcd_init();
 //	lcd_cmd(0x01);
 	lcd_cmd(0x80);
-	lcd_string("DIGITAL DICE");
+	lcd_string("DIG DICE");
+	lcd_cmd(0x8B);
+	lcd_string("COUNT");
 	VICIntSelect=0;
 	VICVectCntl0=(0x20)|14;
 	VICVectAddr0=(unsigned long)ext_int0_isr;
@@ -54,7 +56,7 @@ void ext_int0_isr(void) __irq
 
 	lcd_integer(v);
 	count++;
-	lcd_cmd(0xD1);
+	lcd_cmd(0xCD);
 	lcd_integer(count);
 		delay_ms(250);
 	lcd_cmd(0x80);
