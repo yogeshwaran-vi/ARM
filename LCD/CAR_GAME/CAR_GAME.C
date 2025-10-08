@@ -1,25 +1,73 @@
 #include <LPC21XX.h>
 #include "lcd_header.h"
-
+int count=0;
 void cgram_car(void);
-unsigned char cgram_car_sym[]={0x1C,0x14,0x14,0x1F,0x1F,0x15,0x15,0x0A};
+void ext_int0_isr(void) __irq;
+void ext_int1_isr(void) __irq;
+unsigned char cgram_car_sym[]={0x00,0X0E,0X1F,0X1F,0X1F,0X0A,0X0A,0X00};
 
 int main()
 {
 	lcd_init();
-	cgram_car();
-	lcd_cmd(0x80);
-	lcd_data(0);
+	PINSEL1 = 0x01;
+	PINSEL0 = 1<<29;
+	lcd_string("PLAY NOW");
+   
+	VICIntSelect = 0;  				//ALL IRQ SELCET-0
+	
+	VICVectCntl0 = (0x20)|14; 		//EXTINT NUMBER 14
+	VICVectAddr0 = (unsigned long)ext_int0_isr;
+	VICVectCntl1 = (0X20)|15;
+	VICVectAddr1 = (unsigned long)ext_int1_isr;
+
+	EXTMODE = 0x01;   				//EDGE SENSITIVE
+	EXTPOLAR = 0x00;  				//FALLING EDGE-SENSITIVITY
+
+	VICIntEnable = 1<<14|1<<15;   	//START WHATCHING THE INT SIGNAL
+
+//**********main line code************//
+	while(1)
+	{
+	    cgram_car();
+		lcd_cmd(0xC0); 				//STARTING ADDRESS OF LCD
+		lcd_data(0);
+	}
 }
+
+//******CAR_SYMBOL_LUT********//
 void cgram_car(void)
 {
 	char i=0;
-	lcd_cmd(0x40);
+	lcd_cmd(0x40);					//STARTING ADDRESS OF CGRAM
 	for(i=0;i<8;i++)
 	{
 		lcd_data(cgram_car_sym[i]);
 	}
 }
 
+//***********EXINT0-ISR**********//
+void ext_int0_isr(void) __irq
+{
+	EXTINT = 0x01;  				//reset flag
+		lcd_cmd(0x01); 
+		cgram_car();
+	    lcd_cmd(0x80); 				//STARTING ADDRESS OF LCD
+	    lcd_data(0);
+		//delay_ms(250);
+		//lcd_cmd(0x01);
+	VICVectAddr=0; 
+}
+//*********END OF ISR********//	
 
+//***********EXINT0-ISR**********//
+void ext_int1_isr(void) __irq
+{
+	EXTINT = 0x02;  				//reset flag
+		lcd_cmd(0x01); 
+		cgram_car();
+	    lcd_cmd(0xc0); 				//STARTING ADDRESS OF LCD
+	    lcd_data(0);
+	VICVectAddr=0; 
+}
+//*********END OF ISR********//	 
 
