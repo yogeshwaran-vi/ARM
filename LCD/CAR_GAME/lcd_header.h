@@ -3,11 +3,12 @@
 
 #define lcd_pin 0xFF<<0
 #define RS      1<<8
-#define E	1<<9
+#define E		1<<9
 
 void lcd_cmd(unsigned char);
 void lcd_data(unsigned char);
 void lcd_string(unsigned char *);
+void lcd_integer(int );
 void lcd_init(void)
 {
 	IODIR0 = lcd_pin|RS|E;  //INPUT DIR OF LCD P0.0 TO P0.7 
@@ -42,5 +43,11 @@ void lcd_string(unsigned char *s)
 	{
 		lcd_data(*s++);
 	}
+}
+void lcd_integer(int n)
+{
+	lcd_data((n/100)+48);
+	lcd_data((n/10)+48);
+	lcd_data((n%10)+48);
 }
 
