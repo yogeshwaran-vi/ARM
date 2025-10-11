@@ -11,7 +11,7 @@ int main()
 {
 	lcd_init();
 	heart_symbol();
-		
+
 	while(1)
 	{
 		lcd_cmd(0xc7);
@@ -23,7 +23,6 @@ int main()
 		if(i==0x90)
 			i=0x80;
 	}
-
 }
 void heart_symbol(void)
 {
@@ -46,4 +45,5 @@ void lcd_string(unsigned char *s)
 	}	
 	delay_ms(500);
 }
+
 
