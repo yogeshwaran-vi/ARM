@@ -1,27 +1,25 @@
-#include<lpc21xx.h>
-void fiq_extint0(void) __irq
-{
-	EXTINT = 0X01;
+#include <lpc21xx.h>
 
-	IOSET0 = 0X01;
-	IOCLR0 = 0X01; 	
+void EXTINT_ISR(void) __irq
+{
+	EXTINT=0x01;
+
+	IOSET0=0XFF;
+	IOCLR0=0XFF;
+
+	VICVectAddr=0;
 }
 int main()
 {
-	unsigned int count=0;
-	PINSEL1 = 0x01;	//po.16
-	IODIR0  = 0X01;
-	
-	VICIntSelect = 1<<14;
-	
-	EXTMODE  = 0X01;
-	EXTPOLAR = 0X00;
+	PINSEL1=0X01;
+	IODIR0=0XFF;
 
-	VICIntEnable = 1<<14;
+	VICIntSelect=1<<14;
+	VICIntEnable=1<<14;
 
 	while(1)
 	{
+		int count=0;
 		count++;
 	}
 }
-
