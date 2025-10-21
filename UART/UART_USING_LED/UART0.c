@@ -1,4 +1,4 @@
-/*write an ecp for transmit 'A' using UART0*/
+/*write an ecp for transmit 'A' TO 'Z' for opposite case using UART0*/
 #include <lpc21xx.h>
 void UART0_config(void);
 void UART0_TX(unsigned char);
@@ -28,6 +28,6 @@ void UART0_TX(unsigned char RXbyte)
 	if('A'<=RXbyte & 'Z'>=RXbyte)
 	U0THR=RXbyte+32;
 	else if('a'<=RXbyte & 'z'>=RXbyte)
-	U0THR=RXbyte-32;
-		//U0THR=TXbyte;	
+	U0THR=RXbyte-32;	
 }
+
