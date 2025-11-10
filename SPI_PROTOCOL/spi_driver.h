@@ -8,7 +8,7 @@
 #define SPI_RATE	100000
 
 #define SET(num,pos)	(num|=1<<pos)
-#define CLR(num,pos)	(num&=1<<pos)
+#define CLR(num,pos)	(num&=~(1<<pos)
 #define READ_BIT		(((num>>pos)&1)==0)
 
 unsigned char SPI_DATA(unsigned char data);
@@ -21,10 +21,10 @@ void SPI_INIT(void)
 
 	IODIR0  = 1<<7;
 }
-float READ_MCP3204(int channelno)
+float READ_MCP3204(unsigned char channelno)
 {
 	 unsigned char hbyte,lbyte;
-	 int adc_val=0;
+	 unsigned int adc_val=0;
 
 	 CLR(IOPIN0,CS);//ACTIVATED CHIP
 	 
@@ -46,4 +46,5 @@ unsigned char SPI_DATA(unsigned char data)
 	while(((S0SPSR>>SPIF_BIT)&1)==0);
 	return S0SPDR;
 }
+
 
