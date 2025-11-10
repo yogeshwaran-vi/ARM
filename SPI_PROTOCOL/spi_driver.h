@@ -16,10 +16,10 @@ void SPI_INIT(void)
 {
 	PINSEL0 |= 0x1500;
 	
-	S0SPCCR  = PCLK/SPI_RATE;
+	S0SPCCR  = 150;
 	S0SPCR   = (1<<5|0X18);
 
-	IODIR0  |= 1<<7;
+	IODIR0  = 1<<7;
 }
 float READ_MCP3204(int channelno)
 {
@@ -46,3 +46,4 @@ unsigned char SPI_DATA(unsigned char data)
 	while(((S0SPSR>>SPIF_BIT)&1)==0);
 	return S0SPDR;
 }
+
